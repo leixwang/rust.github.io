@@ -14,11 +14,13 @@ jobs:
     - name: Install and Build
       run: |
         npm install
-        npm run-script build 
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.BUILD_LEIXWEB }}
-        BRANCH: gh-pages
-        FOLDER: build
-        BUILD_SCRIPT: npm install && npm run build
+        npm run-script build
+        cd ./markdown/.vitepress/dist
+        echo 'rust.leix.wang' > CNAME
+        git init
+        git config user.name "Rust"
+        git config user.email "ruest@leix.wang"
+        git add -A
+        git commit -m 'deploy'
+        git push -f https://leixwang:${{ secrets.BUILD_LEIXWEB }}@github.com/leixwang/rust.github.io.git master:gh-pages
+        cd -
